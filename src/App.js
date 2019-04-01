@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
-import logo from './logo.svg';
 import './App.css';
 import CryptoChecker from './components/CryptoChecker';
+require('dotenv').config()
 
 class App extends Component {
   render() {

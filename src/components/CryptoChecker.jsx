@@ -1,13 +1,14 @@
 import React, { useState, useEffect } from 'react'
 import { Dropdown } from 'semantic-ui-react'
 
+const coinAPIKey = process.env.REACT_APP_COIN_API_KEY
+
 const CryptoChecker = () => {
 
   const [coinName, setCoinName] = useState(null)
   const coinUrl = `https://rest.coinapi.io/v1/exchangerate/${coinName}/USD`
 
-  const useCryptoFetcher = (coinName) => {
-    console.log(coinName)
+  const useCryptoFetcher = () => {
     const [coinData, setCoinData] = useState(null)
     const [fetched, setFetched] = useState(false)
     const [loading, setLoading] = useState(false)
@@ -16,7 +17,7 @@ const CryptoChecker = () => {
       setLoading(true)
       fetch(coinUrl,{
         headers: {
-          "X-CoinAPI-Key": '69B5A8E0-ABB5-41EC-A423-18C87EA8B9E0'
+          "X-CoinAPI-Key": coinAPIKey
         }
       }).then(res => {
         if(!coinUrl){
@@ -40,17 +41,16 @@ const CryptoChecker = () => {
    return ([coinData, loading, fetched])
   }
 
-  const mapCoinData = (data) => {
+  const mapCoinData = () => {
     if(!fetched) return <div>No data fetched</div>
     if(loading) return <div>Loading...</div>
-    if(!data){
+    if(!coinData){
       return <div>No Coin Data</div>
     } else {
-      console.log(data)
       return (
         <div>
           <h1>{coinName}</h1>
-          <div>{data.rate} USD</div>
+          <div>{coinData.rate} USD</div>
         </div>
       )
     }
@@ -70,8 +70,6 @@ const CryptoChecker = () => {
     }
   ]
 
-
-  console.log(coinData);
   return(
     <div>
         <Dropdown
@@ -82,7 +80,7 @@ const CryptoChecker = () => {
         onChange={ (e, {value}) => setCoinName(value)}
       />
       <br/>
-      {mapCoinData(coinData)}
+      {mapCoinData()}
     </div>
   )
 }
