@@ -15,28 +15,30 @@ const CryptoChecker = () => {
 
     useEffect(() => {
       setLoading(true)
-      fetch(coinUrl,{
-        headers: {
-          "X-CoinAPI-Key": coinAPIKey
+      if(coinName){
+        fetch(coinUrl,{
+          headers: {
+            "X-CoinAPI-Key": coinAPIKey
+          }
+        }).then(res => {
+          if(!coinUrl){
+            setFetched(false)
+            return null
+          }
+          if(!res.ok){
+            setFetched(false)
+            return null
+          }
+          else {
+            return res.json()
+          }
+        }).then( data => {
+          setLoading(false)
+          setFetched(true)
+          setCoinData(data)
         }
-      }).then(res => {
-        if(!coinUrl){
-          setFetched(false)
-          return null
-        }
-        if(!res.ok){
-          setFetched(false)
-          return null
-        }
-        else {
-          return res.json()
-        }
-      }).then( data => {
-        setLoading(false)
-        setFetched(true)
-        setCoinData(data)
+        )
       }
-      )
     }, [coinUrl])
    return ([coinData, loading, fetched])
   }
